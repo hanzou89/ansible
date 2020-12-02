@@ -1,0 +1,29 @@
+- hosts: afernandez
+
+  tasks:
+
+    - name: crear fichero con nombre del candidato
+      file:
+        path: alvaro_fernandez_avalos
+        state: touch
+        mode: 0644
+
+    - name: insertar email en el fichero
+      lineinfile:
+        path: alvaro_fernandez_avalos
+        line: 'alvarofernandezavalos@gmail.com'
+        insertbefore: BOF
+
+    - name: SO Name
+      debug: var=hostvars[inventory_hostname]['ansible_lsb']['description']
+    
+    - name: check all services
+      service_facts:
+      register: services_state
+    
+    - name: show ssh status
+      debug: var=services_state['ansible_facts']['services']['ssh']
+    
+    - name: install package apache2
+      apt: pkg=apache2
+      become: true
